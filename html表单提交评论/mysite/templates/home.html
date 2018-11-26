@@ -1,0 +1,76 @@
+{% extends 'base.html' %}  <!-- 继承模板文件 -->
+{% load staticfiles %}   <!--注意在每个html中都要加载静态页面 否则不能使用 下面的语法 -->
+{% block title %}
+    我的网站|首页
+{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+{% endblock %}
+
+{% block li_home_active %}active{% endblock %}
+
+{% block content %}
+    <h3 class="home-content">欢迎访问我的网站，看看啦</h3>
+    <!-- 图表容器 DOM -->
+    <div id="container" ></div>
+    <div class="hot-data">
+         <!--今天24小时内的热门博客-->
+        <h3>今天热门访问</h3>
+        <ul>
+            {% for hot_data in today_hot_data %}
+                <li><a href="{% url 'blog_detail' hot_data.content_object.pk %}">{{ hot_data.content_object.title }}</a>({{ hot_data.read_num }})</li>
+            {% empty %}
+                <li>今天暂时没有热门博客</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="hot-data">
+        <h3>昨天热门访问</h3>
+        <ul>
+            {% for hot_data in yesterday_hot_data %}
+                <li><a href="{% url 'blog_detail' hot_data.content_object.pk %}">{{ hot_data.content_object.title }}</a>({{ hot_data.read_num }})</li>
+            {% empty %}
+                <li>昨天没有热门博客</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="hot-data">
+        <h3>七天热门访问</h3>
+        <ul>
+            {% for hot_blog in hot_blogs_for_7_days %}
+                <li><a href="{% url 'blog_detail' hot_blog.id %}">{{ hot_blog.title }}</a>({{ hot_blog.read_num_sum }})</li>
+            {% empty %}
+                <li>本周没有热门博客</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+     <script>
+        // 图表配置
+        var options = {
+            chart: {type: 'line'},
+            title: { text: '最近一周阅读量'},
+            xAxis: {
+                categories: {{ dates|safe }},  // x 轴分类
+                tickmarkPlacement:'on'
+                 },
+            yAxis: {
+                title: {text: null },
+                labels:{enabled:false},
+                gridLineDashStyle:'Dash',
+                gridLineColor:'#c0ccc0'
+            },
+            series: [{                              // 数据列
+                name: '阅读量',                        // 数据列名
+                data: {{ read_num_list }},                     // 数据
+                showInLegend: false
+            }],
+            plotOptions: {line: { dataLabels: {enabled: true} }},
+            credits:{enabled: false}
+        };
+        // 图表初始化函数
+        var chart = Highcharts.chart('container', options);
+    </script>
+{% endblock %}
