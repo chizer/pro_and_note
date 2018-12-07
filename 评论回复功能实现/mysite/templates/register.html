@@ -1,0 +1,36 @@
+{% extends 'base.html' %}  <!-- 继承模板文件 -->
+{% load staticfiles %}   <!--注意在每个html中都要加载静态页面 否则不能使用 下面的语法 -->
+{% block title %}
+    我的网站|注册
+{% endblock %}
+
+{% block li_home_active %}active{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-4">
+{#                面板#}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">注册</h3>
+                    </div>
+                    <div class="panel-body">
+                       <form action="" method="POST">
+                            {% csrf_token %}
+                            {% for field in reg_form %}
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                <p class="text-danger">{{ field.errors.as_text }}</p>
+                            {% endfor %}
+                            <span class="pull-left text-danger">{{ reg_form.non_field_errors }}</span>
+                            <input type="submit" value="注册" class="btn btn-primary pull-right">
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

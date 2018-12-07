@@ -1,0 +1,42 @@
+{% load staticfiles %}    <!-- 加载静态文件，这样可以使用  "{% static 'base.css' %}" 去访问全局静态文件下的具体的css   -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">  <!-- 告诉IE浏览器使用最新内核 以支持css样式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">  <!--  响应式布局 适应屏幕-->
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>{% block title  %}{% endblock %}</title>             <!--块1 用于每一页的自己的标题 -->
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">  <!-- 加载bootstrap文件中的css-->
+    <script type="text/javascript" src="{% static 'jquery-1.12.4.min.js ' %}"></script>  <!-- 加载jqery文件 必须放在 bootstrap的js文件前面加载 因为bootstrap会用到一些jquery插件，-->
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>   <!-- 加载bootstrap文件中的js-->
+    {% block header_extends %}{% endblock %}                    <!--块2  用于每个html文件加载各自的css等静态文件  -->
+</head>
+<body>
+    <!--以下为导航栏 绝对位置高度navbar-fixed-top 这样的问题是内容标题会被覆盖 使用base.css先应付 body往下称 -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation" >  <!--导航条容器 注意使用div而不是nav需要加后面的role为navigation,这样才能明确是一个导航区域 -->
+        <div class="container-fluid">  <!--响应式  加多一个容器？ -->
+            <div class="navbar-header"> <!-- 第一个和其他更好的切换 而这个标签不会动？ -->
+                <a class="navbar-brand" href="{% url 'home' %}">个人博客网站</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" >
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div id="navbar-collapse" class="collapsed navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="{% block li_home_active %}{% endblock %}"><a href="{% url 'home' %}">首页</a></li> <!--active 挖坑   -->
+                    <li class="{% block li_blog_active %}{% endblock %}"><a href="{% url 'blog_list' %}">博客</a></li> <!--active 挖坑 -->
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}               <!-- 块3 用于加载每个页面自己的内容 -->
+    {% block script_entends %}{% endblock %}
+</body>
+</html>
