@@ -1,0 +1,11 @@
+{% extends 'base.html' %}  <!-- 继承模板文件 -->
+{% load staticfiles %}   <!--注意在每个html中都要加载静态页面 否则不能使用 下面的语法 -->
+{% block title %}
+    我的网站|错误
+{% endblock %}
+
+{% block li_home_active %}active{% endblock %}
+
+{% block content %}
+    {{ message }}，<a href="{{ redirect_to }}">返回</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+   /*韩顺平 css+js*/
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+
+    margin-top: 70px!important;
+}
+
+ul{
+    list-style-type: none;
+}
